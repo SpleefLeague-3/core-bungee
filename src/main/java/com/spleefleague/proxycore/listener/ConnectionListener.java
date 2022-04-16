@@ -11,7 +11,6 @@ import com.spleefleague.proxycore.ProxyCore;
 import com.spleefleague.proxycore.droplet.Droplet;
 import com.spleefleague.proxycore.game.session.BattleSessionManager;
 import com.spleefleague.proxycore.player.ProxyCorePlayer;
-import com.spleefleague.proxycore.player.ProxyCorePlayer;
 import com.spleefleague.proxycore.player.ranks.ProxyRank;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -34,8 +33,21 @@ public class ConnectionListener implements Listener {
     public void onPreLogin(LoginEvent event) {
         // Save if loaded here, in case any offline player data was changed recently
         ProxyCore.getInstance().getPlayers().saveIfLoaded(event.getConnection().getUniqueId());
-        ProxyCore.getInstance().getPlayers().saveIfLoaded(event.getConnection().getUniqueId());
         Infraction infraction = ProxyCore.getInstance().getInfractions().isBanned(event.getConnection().getUniqueId());
+
+        UUID dbUuid = ProxyCore.getInstance().getPlayers().getUuidByName(event.getConnection().getName());
+        if (dbUuid == null) {
+            System.out.println("New player! " + event.getConnection().toString());
+        } else if (!dbUuid.toString().equalsIgnoreCase(event.getConnection().getUniqueId().toString())) {
+            System.out.println("ERROR: Connection UUID does not match UUID database. This could be a malicious login.");
+            System.out.println("Login connection: " + event.getConnection().toString());
+            System.out.println("Database uuid: " + dbUuid);
+            event.setCancelled(true);
+            return;
+        } else {
+            System.out.println("Player connection: " + event.getConnection().toString());
+        }
+
         if (infraction != null) {
             if (infraction.getType() == InfractionType.TEMPBAN) {
                 long remaining = infraction.getRemainingTime();
@@ -81,9 +93,14 @@ public class ConnectionListener implements Listener {
         PacketBungeeConnection packetConnection = new PacketBungeeConnection(PacketBungeeConnection.ConnectionType.CONNECT, event.getPlayer().getUniqueId());
         ProxyCore.getInstance().getPacketManager().sendPacket(packetConnection);
 
-        ProxyCore.getInstance().getProxy().getScheduler().schedule(ProxyCore.getInstance(), () -> {
-            ProxyCore.getInstance().getPacketManager().sendPacket(event.getPlayer().getUniqueId(), new PacketBungeeConnection(PacketBungeeConnection.ConnectionType.FIRST_CONNECT, event.getPlayer().getUniqueId()));
-        }, 1000, TimeUnit.MILLISECONDS);
+        ProxyCore.getInstance().getProxy().getScheduler().schedule(ProxyCore.getInstance(),
+                () -> ProxyCore.getInstance().getPacketManager().sendPacket(
+                        event.getPlayer().getUniqueId(),
+                        new PacketBungeeConnection(
+                                PacketBungeeConnection.ConnectionType.FIRST_CONNECT,
+                                event.getPlayer().getUniqueId())),
+                1000,
+                TimeUnit.MILLISECONDS);
 
         ProxyCore.getInstance().getPartyManager().onConnect(event.getPlayer().getUniqueId());
 

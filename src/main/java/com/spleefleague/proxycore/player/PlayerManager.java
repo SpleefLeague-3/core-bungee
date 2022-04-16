@@ -69,7 +69,7 @@ public class PlayerManager <P extends ProxyDBPlayer> {
     /**
      * For modifying all player data, eg when a collectible is removed from the game
      *
-     * @return
+     * @return Set of UUIDs of every player
      */
     public Set<UUID> getAllOfflineUuids() {
         Set<UUID> uuids = new HashSet<>();
@@ -141,6 +141,13 @@ public class PlayerManager <P extends ProxyDBPlayer> {
 
     public P get(UUID uuid) {
         return onlinePlayers.get(uuid);
+    }
+
+    public UUID getUuidByName(String username) {
+        for (Document doc : playerColl.find(new Document("username", username))) {
+            return UUID.fromString(doc.getString("identifier"));
+        }
+        return null;
     }
 
     public P getOffline(UUID uuid) {

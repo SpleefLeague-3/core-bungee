@@ -49,14 +49,14 @@ public class PurchaseCommand extends Command {
     private void purchaseNetworkBooster(ProxyCorePlayer pcp, String boosterName) {
         TextComponent component = new TextComponent();
         component.addExtra(pcp.getChatName());
-        component.addExtra(" has purchased a network booster!");
+        component.addExtra(" has purchased a network booster! (Not set up yet)");
         ProxyCore.getInstance().sendMessage(pcp, "");
     }
 
     private void purchasePersonalBooster(ProxyCorePlayer pcp, String boosterName) {
         TextComponent component = new TextComponent();
         component.addExtra(pcp.getChatName());
-        component.addExtra(" has purchased a network booster!");
+        component.addExtra(" has purchased a personal booster! (Not set up yet)");
         ProxyCore.getInstance().sendMessage(pcp, "");
     }
 
