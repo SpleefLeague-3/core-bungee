@@ -42,6 +42,12 @@ public class ConnectionListener implements Listener {
             System.out.println("ERROR: Connection UUID does not match UUID database. This could be a malicious login.");
             System.out.println("Login connection: " + event.getConnection().toString());
             System.out.println("Database uuid: " + dbUuid);
+
+            TextComponent component = new TextComponent();
+            component.addExtra("Your UUID does not match the username we have stored. Your login is assumed to be malicious.\n" +
+                    "If you think this is incorrect, contact an administrator through the SpleefLeague Discord.\n" +
+                    "discord.spleef.gg");
+            event.setCancelReason(component);
             event.setCancelled(true);
             return;
         } else {
