@@ -19,10 +19,6 @@ public class SpigotListenerBattleForceStart extends SpigotListener<PacketSpigotB
 
     @Override
     protected void receive(Connection sender, PacketSpigotBattleForceStart packet) {
-        List<QueueEntity> players = new ArrayList<>();
-        for (UUID uuid : packet.players) {
-            players.add(new QueuePlayer(ProxyCore.getInstance().getPlayers().get(uuid), packet.query, 0));
-        }
         ProxyCore.getInstance().getQueueManager().forceStart(packet.mode, packet.query, packet.players);
     }
 
