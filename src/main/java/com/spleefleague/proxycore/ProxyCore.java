@@ -57,7 +57,6 @@ public class ProxyCore extends Plugin {
         return instance;
     }
 
-    private MongoClient mongoClient;
     private MongoDatabase database;
 
     private PlayerManager<ProxyCorePlayer> playerManager;
@@ -234,6 +233,7 @@ public class ProxyCore extends Plugin {
      * that should be in the server's folder
      */
     public void initMongo() {
+        MongoClient mongoClient;
         try {
             Logger mongoLogger = Logger.getLogger("org.mongodb.driver.cluster");
             mongoLogger.setLevel(Level.SEVERE);
@@ -310,7 +310,8 @@ public class ProxyCore extends Plugin {
     }
 
     public static String getChatTag() {
-        return "仳 " + Chat.DEFAULT;
+        //return "仳 " + Chat.DEFAULT;
+        return Chat.TAG_BRACE + "[" + Chat.TAG + "SpleefLeague" + Chat.TAG_BRACE + "] " + Chat.DEFAULT;
     }
 
     public void sendMessage(ProxyDBPlayer pcp, String text) {
