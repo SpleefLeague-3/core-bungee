@@ -239,7 +239,7 @@ public class ProxyCore extends Plugin {
             mongoLogger.setLevel(Level.SEVERE);
 
             Properties mongoProps = new Properties();
-            String mongoPath = System.getProperty("user.dir") + "\\..\\mongo.cfg";
+            String mongoPath = System.getProperty("user.dir") + "/mongo.cfg";
             FileInputStream file = new FileInputStream(mongoPath);
 
             mongoProps.load(file);
@@ -256,6 +256,7 @@ public class ProxyCore extends Plugin {
         } catch (IOException e) {
             mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017/"));
             getLogger().log(Level.WARNING, "mongo.cfg not found, using localhost");
+            getLogger().log(Level.WARNING, e.toString());
         }
         database = mongoClient.getDatabase("SpleefLeague");
     }

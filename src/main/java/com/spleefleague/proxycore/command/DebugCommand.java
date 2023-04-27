@@ -1,9 +1,7 @@
 package com.spleefleague.proxycore.command;
 
 import com.spleefleague.proxycore.ProxyCore;
-import com.spleefleague.proxycore.game.queue.QueueContainerDynamic;
 import com.spleefleague.proxycore.player.ProxyCorePlayer;
-import com.spleefleague.proxycore.season.SeasonManager;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 
